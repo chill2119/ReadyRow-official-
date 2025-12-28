@@ -15,7 +15,6 @@ let isSignUpMode = false;
 const authForm = document.getElementById('auth-form');
 const authToggleBtn = document.getElementById('auth-toggle-btn');
 const logoutBtn = document.getElementById('logout-btn');
-const profileBtn = document.getElementById('profile-btn');
 const themeToggle = document.getElementById('theme-toggle');
 
 // --- THEME MANAGEMENT FUNCTIONS ---
@@ -126,7 +125,6 @@ onAuthStateChanged(auth, async (user) => {
             }
             
             // 3. Update UI
-            document.getElementById('profile-initial').textContent = userData.username.charAt(0).toUpperCase();
             showMainApp(userData);
         }
 
@@ -148,14 +146,16 @@ function showAuthPage() {
     document.getElementById('workout-details-page').style.display = 'none';
     
     // Hide nav items
-    document.getElementById('saved-workouts-btn').style.display = 'none';
-    document.getElementById('back-btn').style.display = 'none';
-    document.getElementById('profile-dropdown').style.display = 'none';
+    // Ensure menu is hidden when showing auth
+    const menu = document.getElementById('menu-page');
+    if (menu) menu.style.display = 'none';
 }
 
 function showMainApp(userData) {
     document.getElementById('auth-page').style.display = 'none';
-    document.getElementById('profile-dropdown').style.display = 'block';
+    // Show the top-level menu by default; script.js will decide whether to show setup or menu
+    const menu = document.getElementById('menu-page');
+    if (menu) menu.style.display = 'block';
 
     window.currentUserData = userData; 
     
@@ -196,20 +196,5 @@ function toggleAuthMode() {
 if(authForm) authForm.addEventListener('submit', handleAuth);
 if(authToggleBtn) authToggleBtn.addEventListener('click', toggleAuthMode);
 if(logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-if(profileBtn) profileBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent immediate closing
-    document.getElementById('dropdown-content').classList.toggle('show');
-});
 
-// Close dropdown on click outside
-window.onclick = function(event) {
-  if (!event.target.matches('.profile-circle') && !event.target.matches('#profile-initial')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
+// (No global dropdown handling required anymore)

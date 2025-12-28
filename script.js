@@ -112,9 +112,7 @@ async function setupUser() {
             });
             
             document.getElementById('setup-page').style.display = 'none';
-            document.getElementById('workout-page').style.display = 'block';
-            document.getElementById('back-btn').style.display = 'inline-block';
-            document.getElementById('saved-workouts-btn').style.display = 'inline-block';
+            document.getElementById('menu-page').style.display = 'block';
         } catch (e) {
             console.error("Error saving split:", e);
             alert("Could not save your split time.");
@@ -430,13 +428,11 @@ onAuthStateChanged(auth, async (user) => {
             const data = docSnap.data();
             if (data.split2k) {
                 user2kSplit = data.split2k;
-                
-                document.getElementById('workout-page').style.display = 'block';
+                // Show main menu rather than generator by default
+                document.getElementById('menu-page').style.display = 'block';
                 document.getElementById('setup-page').style.display = 'none';
-                document.getElementById('saved-workouts-page').style.display = 'none'; 
-                
-                document.getElementById('saved-workouts-btn').style.display = 'inline-block';
-                document.getElementById('back-btn').style.display = 'inline-block';
+                document.getElementById('workout-page').style.display = 'none';
+                document.getElementById('saved-workouts-page').style.display = 'none';
 
                 const mins = Math.floor(user2kSplit / 60);
                 const secs = user2kSplit % 60;
@@ -446,9 +442,7 @@ onAuthStateChanged(auth, async (user) => {
                 document.getElementById('setup-page').style.display = 'block';
                 document.getElementById('workout-page').style.display = 'none';
                 document.getElementById('saved-workouts-page').style.display = 'none';
-                
-                document.getElementById('saved-workouts-btn').style.display = 'none';
-                document.getElementById('back-btn').style.display = 'none';
+                document.getElementById('menu-page').style.display = 'none';
             }
         }
         
@@ -460,38 +454,56 @@ onAuthStateChanged(auth, async (user) => {
         if (setupBtn) setupBtn.addEventListener('click', setupUser);
         
         // Connect Clear Button
-        document.getElementById('clear-saved-btn').addEventListener('click', clearAllWorkouts);
+        const clearBtn = document.getElementById('clear-saved-btn');
+        if (clearBtn) clearBtn.addEventListener('click', clearAllWorkouts);
 
-        // Navigation
-        document.getElementById('saved-workouts-btn').addEventListener('click', () => {
-            document.getElementById('workout-page').style.display = 'none';
-            document.getElementById('setup-page').style.display = 'none';
+        // Menu navigation buttons
+        const mWorkout = document.getElementById('menu-workout-btn');
+        const mChange2k = document.getElementById('menu-change2k-btn');
+        const mProfile = document.getElementById('menu-profile-btn');
+        const mSaved = document.getElementById('menu-saved-btn');
+
+        if (mWorkout) mWorkout.addEventListener('click', () => {
+            document.getElementById('menu-page').style.display = 'none';
+            document.getElementById('workout-page').style.display = 'block';
+        });
+
+        if (mChange2k) mChange2k.addEventListener('click', () => {
+            document.getElementById('menu-page').style.display = 'none';
+            document.getElementById('setup-page').style.display = 'block';
+        });
+
+        if (mProfile) mProfile.addEventListener('click', () => {
+            document.getElementById('menu-page').style.display = 'none';
+            document.getElementById('profile-page').style.display = 'block';
+            // fill email
+            if (window.currentUserData) {
+                if (window.currentUserData.email) document.getElementById('profile-email').textContent = 'Email: ' + window.currentUserData.email;
+                if (window.currentUserData.username) document.getElementById('profile-username').textContent = window.currentUserData.username;
+                if (window.currentUserData.username) document.getElementById('profile-avatar').textContent = window.currentUserData.username.charAt(0).toUpperCase();
+            } else if (auth.currentUser) {
+                document.getElementById('profile-email').textContent = 'Email: ' + auth.currentUser.email;
+                document.getElementById('profile-username').textContent = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+                document.getElementById('profile-avatar').textContent = (auth.currentUser.displayName || auth.currentUser.email || 'U').charAt(0).toUpperCase();
+            }
+        });
+
+        if (mSaved) mSaved.addEventListener('click', () => {
+            document.getElementById('menu-page').style.display = 'none';
             document.getElementById('saved-workouts-page').style.display = 'block';
-            
-            document.getElementById('saved-workouts-btn').style.display = 'none';
             loadSavedWorkouts();
         });
-        
-        document.getElementById('back-to-main-btn').addEventListener('click', () => {
-            document.getElementById('saved-workouts-page').style.display = 'none';
-            document.getElementById('workout-page').style.display = 'block';
-            document.getElementById('saved-workouts-btn').style.display = 'inline-block';
-        });
 
-        document.getElementById('back-to-workouts-btn').addEventListener('click', () => {
-            document.getElementById('workout-details-page').style.display = 'none';
-            document.getElementById('saved-workouts-page').style.display = 'block';
-        });
-
-        document.getElementById('back-btn').addEventListener('click', () => {
-             document.getElementById('workout-page').style.display = 'none';
-             document.getElementById('saved-workouts-page').style.display = 'none';
-             document.getElementById('workout-details-page').style.display = 'none';
-
-             document.getElementById('setup-page').style.display = 'block';
-             
-             document.getElementById('saved-workouts-btn').style.display = 'none';
-             document.getElementById('back-btn').style.display = 'none';
+        // Return-to-menu handlers (for all pages with that class)
+        document.querySelectorAll('.return-to-menu').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // hide all primary pages
+                ['workout-page','setup-page','saved-workouts-page','workout-details-page','all-workouts-page','profile-page'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                document.getElementById('menu-page').style.display = 'block';
+            });
         });
     }
 });

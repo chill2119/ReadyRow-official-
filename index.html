@@ -7,29 +7,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>ReadyRow</h1>
-        <div class="header-buttons">
-            <button id="back-btn" type="button" style="display: none;">Change 2k</button>
-            <button id="generator-btn" type="button" style="display: none;">Generator</button>
-            <button id="saved-workouts-btn" type="button" style="display: none;">Saved</button>
-            <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
-                <button id="profile-btn" type="button" class="profile-circle">
-                    <span id="profile-initial">U</span>
-                </button>
-                <div class="dropdown-content" id="dropdown-content">
-                    <div class="dropdown-item theme-item">
-                        <span>Dark Mode</span>
-                        <label class="switch">
-                            <input type="checkbox" id="theme-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <button id="logout-btn" type="button">Logout</button>
-                </div>
-            </div>
+    <!-- Removed global header to simplify mobile layout. Main menu below. -->
+
+    <!-- Main Menu Page (mobile-first) -->
+    <section id="menu-page" style="display: none;">
+        <div class="menu-container">
+            <button id="menu-workout-btn" class="menu-button">Workout Generator</button>
+            <button id="menu-change2k-btn" class="menu-button">Change 2k</button>
+            <button id="menu-profile-btn" class="menu-button">My Profile</button>
+            <button id="menu-saved-btn" class="menu-button">Saved</button>
         </div>
-    </header>
+    </section>
 
     <main>
         <!-- Login/Signup Page -->
@@ -78,6 +66,7 @@
                     <input type="number" id="split-seconds" value="45" min="0" max="59">
                 </div>
                 <button type="button" id="setup-btn">Start Training</button>
+                <button type="button" class="return-to-menu">Return to Menu</button>
             </form>
         </section>
 
@@ -108,6 +97,7 @@
             </form>
 
             <div id="workout-results"></div>
+            <button type="button" class="return-to-menu">Return to Menu</button>
         </section>
 
         <!-- Saved Workouts Page -->
@@ -115,20 +105,46 @@
             <h2>Saved Workouts</h2>
             <div id="saved-list"></div>
             <button type="button" id="clear-saved-btn">Clear All Saved</button>
-            <button type="button" id="back-to-main-btn">Back to Workouts</button>
+            <button type="button" class="return-to-menu">Return to Menu</button>
         </section>
 
         <!-- Workout Details Page -->
         <section id="workout-details-page" style="display: none;">
             <div id="workout-details"></div>
-            <button type="button" id="back-to-workouts-btn">Back to Workouts</button>
+            <button type="button" class="return-to-menu">Return to Menu</button>
         </section>
 
         <!-- All Workouts Page -->
         <section id="all-workouts-page" style="display: none;">
             <h2>All Saved Workouts</h2>
             <div id="all-workouts-list"></div>
-            <button type="button" id="back-from-all-btn">Back to Workouts</button>
+            <button type="button" class="return-to-menu">Return to Menu</button>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile-page" style="display: none;">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profile-avatar">U</div>
+                    <div>
+                        <h3 id="profile-username">User</h3>
+                        <p id="profile-email" class="muted">Email: </p>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <div class="dropdown-item theme-item" style="margin:1rem 0;">
+                        <span>Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button id="logout-btn" type="button" class="danger-btn">Logout</button>
+                    <button type="button" class="return-to-menu">Return to Menu</button>
+                </div>
+            </div>
         </section>
     </main>
 

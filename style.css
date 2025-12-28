@@ -160,6 +160,65 @@ input:checked + .slider:before {
     width: 100%;
 }
 
+/* Profile card styling to match app */
+.profile-container {
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    max-width: 480px;
+    margin: 1.25rem auto;
+}
+
+.profile-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.profile-container h3 {
+    margin: 0 0 0.25rem 0;
+    color: var(--primary-color);
+}
+
+.profile-container .muted {
+    color: var(--secondary-color);
+    font-size: 0.95rem;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.danger-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.danger-btn:hover { filter: brightness(0.95); }
+
 #auth-title {
     margin-bottom: 0.5rem;
     color: var(--primary-color);
@@ -300,6 +359,51 @@ header {
     border-radius: 0 0 20px 20px;
     margin-bottom: 2rem;
 }
+
+/* Hide legacy header (we use a compact menu instead) */
+header { display: none; }
+
+/* Mobile main menu styles */
+.menu-container {
+    max-width: 420px;
+    margin: 1.25rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 1rem;
+}
+
+.menu-button {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+}
+
+.menu-button:hover { transform: translateY(-2px); }
+
+/* Return-to-menu buttons shared style */
+.return-to-menu {
+    display: block;
+    width: 90%;
+    max-width: 420px;
+    margin: 1rem auto 2rem auto;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.return-to-menu:hover { background: #f6f9fc; }
 
 header h1 {
     font-size: 2rem;
