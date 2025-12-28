@@ -344,7 +344,8 @@ window.viewWorkoutDetails = function(index) {
     const detailsDiv = document.getElementById('workout-details');
     
     document.getElementById('saved-workouts-page').style.display = 'none';
-    detailsPage.style.display = 'flex'; 
+    // show overlay/page
+    detailsPage.style.display = 'block'; 
     
     let splitsHtml = '';
     if (workout.recordedSplits && workout.recordedSplits.length > 0) {
@@ -415,6 +416,37 @@ window.viewWorkoutDetails = function(index) {
         </div>
         ${splitsHtml}
     `;
+    // Add compact class to reduce spacing on small screens
+    detailsDiv.classList.add('compact');
+
+    // Add a return button at the end (ensure it exists after we overwrite innerHTML)
+    const existingFooter = detailsDiv.querySelector('.details-footer');
+    if (!existingFooter) {
+        const footer = document.createElement('div');
+        footer.className = 'details-footer';
+        footer.innerHTML = '<button type="button" class="return-to-menu">Return to Menu</button>';
+        detailsDiv.appendChild(footer);
+    }
+
+    // Wire up return button
+    const retBtn = detailsDiv.querySelector('.return-to-menu');
+    if (retBtn) {
+        retBtn.addEventListener('click', () => {
+            detailsPage.style.display = 'none';
+            // hide details and show main menu
+            document.getElementById('menu-page').style.display = 'block';
+            // clean up
+            detailsDiv.classList.remove('compact');
+        });
+    }
+
+    // Ensure the details container is visible at the top and scrolled into view on mobile
+    try {
+        detailsPage.scrollTop = 0;
+        detailsDiv.scrollTop = 0;
+        detailsDiv.scrollIntoView({ behavior: 'auto', block: 'start' });
+        window.scrollTo(0, 0);
+    } catch (e) { /* ignore scrolling errors */ }
 }
 
 // --- INITIALIZATION ---

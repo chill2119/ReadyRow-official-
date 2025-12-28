@@ -4,6 +4,17 @@
     display: inline-block;
 }
 
+/* Compact variant for workout details to reduce vertical footprint */
+#workout-details.compact h2 { font-size: 1.15rem; margin-bottom: 0.25rem; }
+#workout-details.compact .workout-cards { gap: 0.5rem; }
+#workout-details.compact .workout-card { padding: 0.6rem; }
+#workout-details.compact .coaching-card { padding: 0.6rem; }
+#workout-details.compact .target-value { font-size: 1rem; }
+#workout-details.compact .workout-description { font-size: 0.95rem; }
+#workout-details.compact .actual-splits { padding: 0.85rem; }
+#workout-details.compact .split-item { font-size: 0.9rem; padding: 0.4rem; }
+#workout-details.compact .details-footer { margin-top: 0.5rem; }
+
 .profile-circle {
     width: 40px;
     height: 40px;
@@ -1117,6 +1128,135 @@ select:focus, input[type="number"]:focus {
             "info splits";
         gap: 3rem;
         align-items: start;
+    }
+}
+
+/* Improve vertical layout for small phones (e.g., iPhone 15) */
+@media (max-width: 420px) {
+    /* add a little top padding so the header/title isn't hidden under status bars */
+    #workout-details-page {
+        padding: 0.75rem 0 0 0;
+    }
+
+    /* Make the inner details scrollable and not force full-height so top content won't be pushed off */
+    #workout-details-page #workout-details {
+        padding: 1rem 1rem 2.5rem 1rem;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem;
+        background: var(--surface-color) !important;
+        box-shadow: none;
+        border-radius: 12px;
+        max-width: 100%;
+        height: auto;
+        min-height: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Constrain horizontal width for better readability on phones */
+        max-width: 420px;
+        margin: 0.25rem auto;
+    }
+
+    #workout-details .workout-header {
+        display: block;
+        border-bottom: none;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0;
+    }
+
+    #workout-details .workout-header h2 {
+        font-size: 1.3rem;
+        margin-bottom: 0.25rem;
+    }
+
+    #workout-details .workout-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .workout-card {
+        padding: 1rem;
+    }
+
+    /* Reduce some card padding to keep things compact */
+    #workout-details .workout-card { padding: 0.85rem; }
+
+    .target-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .target-item { text-align: left; }
+
+    .actual-splits {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    /* Slightly smaller font for split items to avoid wrapping */
+    .split-item { font-size: 0.92rem; }
+
+    /* Constrain overall app width on very small screens to avoid horizontal overflow */
+    html, body { overflow-x: hidden; }
+
+    main {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 0 0.75rem;
+    }
+
+    /* Ensure key containers stay narrow and centered */
+    #workout-results, #workout-form, #saved-workouts-page, .profile-container, #setup-page, #auth-page {
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Force split grids to single-column on narrow phones to avoid overflow */
+    .split-inputs-grid, .splits-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem;
+    }
+
+    /* Targets stack vertically */
+    .target-grid { grid-template-columns: 1fr !important; }
+
+    /* Reduce large paddings that cause content to push off-screen */
+    #workout-details-page #workout-details { padding-top: 0.85rem; padding-bottom: 1.5rem; }
+
+    /* Tweak header spacing */
+    #workout-details .workout-header { margin-top: 0; }
+
+    /* Keep buttons full-width but not overly large */
+    .menu-button, .return-to-menu, .danger-btn { width: 100%; max-width: none; }
+
+    /* Make splits clearer and stacked */
+    .splits-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .split-item {
+        padding: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .average-split {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    /* Hide legacy floating back button on small screens to avoid overlap */
+    #back-to-workouts-btn { display: none !important; }
+
+    /* The `.return-to-menu` inside details should be full width and flow below content */
+    #workout-details .details-footer .return-to-menu {
+        position: static;
+        width: 100%;
+        margin: 0.5rem 0 1rem 0;
+        max-width: none;
     }
 }
 
