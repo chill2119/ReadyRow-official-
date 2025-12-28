@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadyRow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ReadyRow</h1>
+        <div class="header-buttons">
+            <button id="back-btn" type="button" style="display: none;">Change 2k</button>
+            <button id="generator-btn" type="button" style="display: none;">Generator</button>
+            <button id="saved-workouts-btn" type="button" style="display: none;">Saved</button>
+            <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+                <button id="profile-btn" type="button" class="profile-circle">
+                    <span id="profile-initial">U</span>
+                </button>
+                <div class="dropdown-content" id="dropdown-content">
+                    <div class="dropdown-item theme-item">
+                        <span>Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <button id="logout-btn" type="button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Login/Signup Page -->
+        <section id="auth-page">
+            <div class="auth-container">
+                <h2 id="auth-title">Welcome to ReadyRow</h2>
+                <p id="auth-subtitle">Sign in to access your personalized workouts</p>
+                
+                <form id="auth-form">
+                    <div class="input-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    
+                    <div class="input-group" id="email-group" style="display: none;">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    
+                    <button type="submit" id="auth-submit-btn">Sign In</button>
+                </form>
+                
+                <p class="auth-switch">
+                    <span id="auth-switch-text">Don't have an account?</span>
+                    <button type="button" id="auth-toggle-btn">Sign Up</button>
+                </p>
+            </div>
+        </section>
+
+        <!-- Setup Page -->
+        <section id="setup-page" style="display: none;">
+            <h2>Welcome to ReadyRow</h2>
+            <p>Let's personalize your workouts. What's your 2k split time?</p>
+            <form id="setup-form">
+                <div>
+                    <label for="split-minutes">Minutes:</label>
+                    <input type="number" id="split-minutes" value="1" min="0" max="20">
+                </div>
+                <div>
+                    <label for="split-seconds">Seconds:</label>
+                    <input type="number" id="split-seconds" value="45" min="0" max="59">
+                </div>
+                <button type="button" id="setup-btn">Start Training</button>
+            </form>
+        </section>
+
+        <!-- Workout Page -->
+        <section id="workout-page" style="display: none;">
+            <form id="workout-form">
+                <div>
+                    <label for="workout-type">Workout Type:</label>
+                    <select id="workout-type" name="workout-type">
+                        <option value="steady-state">Steady State</option>
+                        <option value="ut1">UT1</option>
+                        <option value="threshold">AT</option>
+                        <option value="sprint">Sprint</option>
+                        <option value="wod">WOD</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="difficulty">Duration:</label>
+                    <select id="difficulty" name="difficulty">
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                    </select>
+                </div>
+
+                <button type="button" id="generate-btn">Generate Workout</button>
+            </form>
+
+            <div id="workout-results"></div>
+        </section>
+
+        <!-- Saved Workouts Page -->
+        <section id="saved-workouts-page" style="display: none;">
+            <h2>Saved Workouts</h2>
+            <div id="saved-list"></div>
+            <button type="button" id="clear-saved-btn">Clear All Saved</button>
+            <button type="button" id="back-to-main-btn">Back to Workouts</button>
+        </section>
+
+        <!-- Workout Details Page -->
+        <section id="workout-details-page" style="display: none;">
+            <div id="workout-details"></div>
+            <button type="button" id="back-to-workouts-btn">Back to Workouts</button>
+        </section>
+
+        <!-- All Workouts Page -->
+        <section id="all-workouts-page" style="display: none;">
+            <h2>All Saved Workouts</h2>
+            <div id="all-workouts-list"></div>
+            <button type="button" id="back-from-all-btn">Back to Workouts</button>
+        </section>
+    </main>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
