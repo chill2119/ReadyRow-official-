@@ -17,6 +17,7 @@
                 <p id="menu-date">Loading date...</p>
             </div>
             <button id="menu-workout-btn" class="menu-button">Workout Generator</button>
+            <button id="menu-log-btn" class="menu-button">Log Workout</button>
             <button id="menu-change2k-btn" class="menu-button">Change 2k</button>
             <button id="menu-profile-btn" class="menu-button">My Profile</button>
             <button id="menu-saved-btn" class="menu-button">Saved</button>
@@ -124,6 +125,38 @@
             <h2>All Saved Workouts</h2>
             <div id="all-workouts-list"></div>
             <button type="button" class="return-to-menu">Return to Menu</button>
+        </section>
+
+        <!-- Log Workout Page -->
+        <section id="log-workout-page" style="display: none;">
+            <div class="log-container">
+                <h2>Log Workout</h2>
+                <form id="log-workout-form">
+                    <div class="small-input-grid">
+                        <div class="small-card">
+                            <label for="log-intervals">Intervals</label>
+                            <input id="log-intervals" type="number" min="1" value="1">
+                        </div>
+                            <div class="small-card">
+                                <label for="log-duration">Duration (minutes or mm:ss)</label>
+                                <input id="log-duration" type="text" placeholder="20">
+                            </div>
+                    </div>
+
+                    <div class="card-block">
+                        <label for="log-avg-split">Average Split</label>
+                        <input id="log-avg-split" type="text" placeholder="2:00">
+                    </div>
+
+                    <div class="card-block">
+                        <label for="log-meters">Total Meters</label>
+                        <input id="log-meters" type="number" min="0" placeholder="2000">
+                    </div>
+
+                    <button type="button" id="save-log-btn" class="primary-btn">Save Workout</button>
+                    <button type="button" class="return-to-menu">Return to Menu</button>
+                </form>
+            </div>
         </section>
 
         <!-- Profile Page -->

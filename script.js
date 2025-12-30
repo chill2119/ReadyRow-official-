@@ -418,7 +418,36 @@ window.viewWorkoutDetails = function(index) {
         `;
     }
 
-    detailsDiv.innerHTML = `
+    // If this was a manually logged workout, show a simplified view
+    if (workout.type === 'manual') {
+        const avgSplitDisplay = workout.avgSplit || '';
+        const metersDisplay = (workout.meters !== undefined && workout.meters !== null) ? workout.meters : '';
+
+        detailsDiv.innerHTML = `
+        <div class="workout-header">
+            <h2>Manual Log</h2>
+            <span class="workout-date">${new Date(workout.date).toLocaleDateString()}</span>
+        </div>
+
+        <div class="workout-cards">
+            <div class="workout-card">
+                <h4>Workout</h4>
+                <p class="workout-description">${workout.workout}</p>
+            </div>
+
+            <div class="workout-card">
+                <h4>Average Split</h4>
+                <p class="workout-description">${avgSplitDisplay}</p>
+            </div>
+
+            <div class="workout-card">
+                <h4>Meters</h4>
+                <p class="workout-description">${metersDisplay}</p>
+            </div>
+        </div>
+        `;
+    } else {
+        detailsDiv.innerHTML = `
         <div class="workout-header">
             <h2>${workout.type.toUpperCase()}</h2>
             <span class="workout-date">${new Date(workout.date).toLocaleDateString()}</span>
@@ -451,6 +480,7 @@ window.viewWorkoutDetails = function(index) {
         </div>
         ${splitsHtml}
     `;
+    }
     // Add compact class to reduce spacing on small screens
     detailsDiv.classList.add('compact');
 
@@ -528,6 +558,7 @@ onAuthStateChanged(auth, async (user) => {
 
         // Menu navigation buttons
         const mWorkout = document.getElementById('menu-workout-btn');
+        const mLog = document.getElementById('menu-log-btn');
         const mChange2k = document.getElementById('menu-change2k-btn');
         const mProfile = document.getElementById('menu-profile-btn');
         const mSaved = document.getElementById('menu-saved-btn');
@@ -540,6 +571,14 @@ onAuthStateChanged(auth, async (user) => {
         if (mChange2k) mChange2k.addEventListener('click', () => {
             document.getElementById('menu-page').style.display = 'none';
             document.getElementById('setup-page').style.display = 'block';
+        });
+
+        if (mLog) mLog.addEventListener('click', () => {
+            document.getElementById('menu-page').style.display = 'none';
+            document.getElementById('log-workout-page').style.display = 'block';
+            // clear form
+            const form = document.getElementById('log-workout-form');
+            if (form) form.reset();
         });
 
         if (mProfile) mProfile.addEventListener('click', () => {
@@ -567,13 +606,62 @@ onAuthStateChanged(auth, async (user) => {
         document.querySelectorAll('.return-to-menu').forEach(btn => {
             btn.addEventListener('click', () => {
                 // hide all primary pages
-                ['workout-page','setup-page','saved-workouts-page','workout-details-page','all-workouts-page','profile-page'].forEach(id => {
+                ['workout-page','setup-page','saved-workouts-page','workout-details-page','all-workouts-page','profile-page','log-workout-page'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
                 });
                 document.getElementById('menu-page').style.display = 'block';
                 updateMenuGreeting();
             });
+        });
+
+        // Save log workout handler
+        const saveLogBtn = document.getElementById('save-log-btn');
+        if (saveLogBtn) saveLogBtn.addEventListener('click', async () => {
+            if (!auth.currentUser) { alert('Please sign in'); return; }
+
+            const intervals = parseInt(document.getElementById('log-intervals').value) || 0;
+            const durationRaw = document.getElementById('log-duration').value.trim();
+            const avgSplit = document.getElementById('log-avg-split').value.trim();
+            const meters = parseInt(document.getElementById('log-meters').value) || 0;
+
+            if (intervals <= 0 || !durationRaw) { alert('Please enter intervals and duration'); return; }
+
+            // Normalize duration: accept plain minutes like "20" -> "20:00", or accept mm:ss input
+            let duration = durationRaw;
+            if (!duration.includes(':')) {
+                // try numeric minutes
+                const mins = parseFloat(durationRaw);
+                if (!isNaN(mins)) {
+                    const whole = Math.floor(mins);
+                    const secs = 0;
+                    duration = `${whole}:${secs.toString().padStart(2, '0')}`;
+                }
+            }
+
+            const workoutData = {
+                userId: auth.currentUser.uid,
+                type: 'manual',
+                difficulty: 'custom',
+                workout: `${intervals} x ${duration}`,
+                intervals: intervals,
+                duration: duration,
+                avgSplit: avgSplit,
+                meters: meters,
+                date: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, 'workouts'), workoutData);
+                alert('Workout logged successfully');
+                // show saved page
+                document.getElementById('log-workout-page').style.display = 'none';
+                document.getElementById('saved-workouts-page').style.display = 'block';
+                loadSavedWorkouts();
+            } catch (e) {
+                console.error('Error logging workout', e);
+                alert('Could not save workout');
+            }
         });
     }
 });
