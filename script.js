@@ -91,6 +91,38 @@ function parseWorkoutIntervals(workout) {
     return 1;
 }
 
+function getOrdinal(n) {
+    const s = ["th","st","nd","rd"], v = n % 100;
+    return (s[(v-20)%10] || s[v] || s[0]);
+}
+
+function formatMenuDate(d) {
+    const weekday = d.toLocaleDateString(undefined, { weekday: 'long' });
+    const month = d.toLocaleDateString(undefined, { month: 'long' });
+    const day = d.getDate();
+    const ord = getOrdinal(day);
+    return `${weekday}, ${month} ${day}${ord}`;
+}
+
+function updateMenuGreeting() {
+    const greetEl = document.getElementById('menu-greeting');
+    const dateEl = document.getElementById('menu-date');
+    if (dateEl) dateEl.textContent = formatMenuDate(new Date());
+
+    let firstName = '';
+    if (window.currentUserData && window.currentUserData.username) {
+        firstName = window.currentUserData.username.split(' ')[0];
+    } else if (auth.currentUser) {
+        firstName = (auth.currentUser.displayName || auth.currentUser.email || '').split(' ')[0];
+        if (firstName && firstName.includes('@')) firstName = firstName.split('@')[0];
+    }
+
+    if (greetEl) {
+        if (firstName) greetEl.textContent = `Welcome back, ${firstName}`;
+        else greetEl.textContent = 'Welcome back';
+    }
+}
+
 // --- CORE APP FUNCTIONS ---
 
 async function setupUser() {
@@ -113,6 +145,7 @@ async function setupUser() {
             
             document.getElementById('setup-page').style.display = 'none';
             document.getElementById('menu-page').style.display = 'block';
+            updateMenuGreeting();
         } catch (e) {
             console.error("Error saving split:", e);
             alert("Could not save your split time.");
@@ -150,6 +183,8 @@ function generateWorkout() {
 
 function renderWorkoutResult() {
     const resultsDiv = document.getElementById('workout-results');
+    // Make sure results container is visible when rendering
+    resultsDiv.style.display = 'block';
     resultsDiv.style.opacity = '0';
     
     const intervals = parseWorkoutIntervals(currentWorkout.workout);
@@ -466,6 +501,8 @@ onAuthStateChanged(auth, async (user) => {
                 document.getElementById('workout-page').style.display = 'none';
                 document.getElementById('saved-workouts-page').style.display = 'none';
 
+                    updateMenuGreeting();
+
                 const mins = Math.floor(user2kSplit / 60);
                 const secs = user2kSplit % 60;
                 document.getElementById('split-minutes').value = mins;
@@ -535,6 +572,7 @@ onAuthStateChanged(auth, async (user) => {
                     if (el) el.style.display = 'none';
                 });
                 document.getElementById('menu-page').style.display = 'block';
+                updateMenuGreeting();
             });
         });
     }

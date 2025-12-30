@@ -414,6 +414,24 @@ header { display: none; }
     cursor: pointer;
 }
 
+/* Menu header styles */
+.menu-header {
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.menu-header h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.menu-header p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--secondary-color);
+}
+
 .return-to-menu:hover { background: #f6f9fc; }
 
 header h1 {
@@ -572,6 +590,11 @@ select:focus, input[type="number"]:focus {
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
     border: 1px solid var(--border-color);
+}
+
+/* Hide the workout results card when it's empty so no blank bubble shows */
+#workout-results:empty {
+    display: none;
 }
 
 .split-tracker {
